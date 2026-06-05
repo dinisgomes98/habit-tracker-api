@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from api.database import SessionLocal
 from api.models.habit_tracker import HabitTracker
 from api.schemas.habit_tracker import PostHabit, PutHabit
+from api.services.habit_services import get_completed_habits
 
 habit_router = APIRouter(prefix="/api", tags=["HabitTracker"])
 
@@ -79,3 +80,14 @@ def delete_habit(habit_id: int):
     db.close()
 
     return {"message": "Habit deleted successfully"}
+
+@habit_router.get("/completed_habits")
+def completed_habits():
+
+    db = SessionLocal()
+
+    result = get_completed_habits(db)
+
+    db.close()
+
+    return result
