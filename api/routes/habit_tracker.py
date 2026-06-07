@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException
+from datetime import date
 from api.database import SessionLocal
 from api.models.habit_tracker import HabitTracker
 from api.schemas.habit_tracker import PostHabit, PutHabit
-from api.services.habit_services import get_completed_habits
+from api.services.habit_services import get_completed_habits, get_habits_by_date
 
 habit_router = APIRouter(prefix="/api", tags=["HabitTracker"])
 
@@ -87,6 +88,17 @@ def completed_habits():
     db = SessionLocal()
 
     result = get_completed_habits(db)
+
+    db.close()
+
+    return result
+
+@habit_router.get("/habits_by_date")
+def habits_by_date(selected_date: date):
+
+    db = SessionLocal()
+
+    result = get_habits_by_date(db, selected_date)
 
     db.close()
 
