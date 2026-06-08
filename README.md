@@ -10,6 +10,8 @@ A REST API built with FastAPI to track habits and practice backend development c
 - Modular API architecture
 - Habit filtering endpoints
 - Service layer separation
+- Daily habit tracking
+- Habit statistics endpoint
 
 ## Tech Stack
 
@@ -46,6 +48,7 @@ This project was built to practice:
 - Service layer separation
 - Query filtering
 - Request validation
+- Basic analytics and statistics
 
 ## How to Run
 
@@ -69,8 +72,27 @@ python main.py
 ```
 
 ## Available Endpoints
+
 - `GET /api/`
 - `POST /api/`
 - `PUT /api/{habit_id}`
 - `DELETE /api/{habit_id}`
-- `GET /api/completed_habits`
+
+## Filters
+
+- `GET /api/?selected_date=YYYY-MM-DD`
+- `GET /api/?completed=true`
+- `GET /api/?selected_date=YYYY-MM-DD&completed=true`
+
+## Specialized Endpoints
+
+- `GET /api/today`
+- `GET /api/stats`
+
+## Example Stats Response
+
+{
+  "total habits": 10,
+  "completed habits": 7,
+  "completion rate": 70.0
+}
