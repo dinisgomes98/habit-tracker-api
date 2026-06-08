@@ -85,3 +85,20 @@ def delete_habit(habit_id: int):
     db.close()
 
     return {"message": "Habit deleted successfully"}
+
+@habit_router.get("/today")
+def today_habits():
+
+    db = SessionLocal()
+
+    today = date.today()
+
+    habits = get_habits(
+        db=db,
+        selected_date=today,
+        completed=None
+    )
+
+    db.close()
+
+    return habits
