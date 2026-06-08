@@ -4,7 +4,7 @@ from typing import Optional
 from api.database import SessionLocal
 from api.models.habit_tracker import HabitTracker
 from api.schemas.habit_tracker import PostHabit, PutHabit
-from api.services.habit_services import get_habits
+from api.services.habit_services import get_habits, get_stats
 
 habit_router = APIRouter(prefix="/api", tags=["HabitTracker"])
 
@@ -102,3 +102,14 @@ def today_habits():
     db.close()
 
     return habits
+
+@habit_router.get("/stats")
+def stats():
+
+    db = SessionLocal()
+
+    stats = get_stats(db)
+
+    db.close()
+
+    return stats
