@@ -1,17 +1,19 @@
 from api.models.habit_tracker import HabitTracker
 
-def get_completed_habits(db):
+def get_habits(
+    db, 
+    selected_date, 
+    completed
+):
 
-    habits = db.query(HabitTracker).filter(
-        HabitTracker.completed == True
-    ).all()
+    query = db.query(HabitTracker)
 
-    return habits
+    if selected_date is not None:
+        query = query.filter(HabitTracker.date == selected_date)
 
-def get_habits_by_date(db, selected_date):
+    if completed is not None:
+        query = query.filter(HabitTracker.completed == completed)
 
-    habits = db.query(HabitTracker).filter(
-        HabitTracker.date == selected_date
-    ).all()
+    habits = query.all()
 
     return habits

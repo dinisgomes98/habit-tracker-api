@@ -1,17 +1,21 @@
 from fastapi import APIRouter, HTTPException
 from datetime import date
+from typing import Optional
 from api.database import SessionLocal
 from api.models.habit_tracker import HabitTracker
 from api.schemas.habit_tracker import PostHabit, PutHabit
-from api.services.habit_services import get_completed_habits, get_habits_by_date
+from api.services.habit_services import get_habits
 
 habit_router = APIRouter(prefix="/api", tags=["HabitTracker"])
 
 @habit_router.get("/")
-def all_habits():
+def all_habits(
+    selected_date: Optional[date] = None, 
+    completed: Optional[bool] = None
+):
     
     db = SessionLocal()
-    habits = db.query(HabitTracker).all()
+    habits = get_habits(db, selected_date, completed)
     db.close()
 
     return habits
@@ -81,25 +85,3 @@ def delete_habit(habit_id: int):
     db.close()
 
     return {"message": "Habit deleted successfully"}
-
-@habit_router.get("/completed_habits")
-def completed_habits():
-
-    db = SessionLocal()
-
-    result = get_completed_habits(db)
-
-    db.close()
-
-    return result
-
-@habit_router.get("/habits_by_date")
-def habits_by_date(selected_date: date):
-
-    db = SessionLocal()
-
-    result = get_habits_by_date(db, selected_date)
-
-    db.close()
-
-    return result
